@@ -5,10 +5,10 @@
 </div>
 <div align="center">
   <h1><strong>Prototype Angular</strong></h1>
-  <a href="https://atlanta-ink-studio.vercel.app/"><strong>Deploy on Vercel</strong></a>
+  <a href="https://prototype-angular.vercel.app/"><strong>Deploy on Vercel</strong></a>
 </div>
 <p align="center">
-This project is a web application developed with Angular 20, designed as a prototype for school management. It includes modules for authentication, dashboard, subjects, annotations, notifications, reports, calendar, and teachers.
+Web application built with Angular, serving as a prototype for school management. It features modules for authentication, dashboard, subjects, notes, notifications, reports, calendar, and teacher management.
 <p>
 
 <p align="center">
