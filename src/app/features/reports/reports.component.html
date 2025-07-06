@@ -1,0 +1,180 @@
+<app-main-layout>
+  <div class="space-y-6">
+    <div class="flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-gray-900">Report Cards</h1>
+      <div class="text-sm text-gray-500">Academic Year 2024-2025</div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div
+        *ngFor="let child of user?.children"
+        class="card hover:shadow-lg transition-shadow duration-200"
+      >
+        <div class="card-header">
+          <div class="flex items-center space-x-4">
+            <img
+              [src]="child.photo || '/api/placeholder/60/60'"
+              [alt]="child.firstName + ' ' + child.lastName"
+              class="w-12 h-12 rounded-full object-cover"
+            />
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">
+                {{ child.firstName }} {{ child.lastName }}
+              </h3>
+              <p class="text-sm text-gray-600">
+                Class {{ child.class }} • Grade {{ child.grade }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div class="text-center p-3 bg-gray-50 rounded-lg">
+              <div class="text-xl font-bold text-primary-600">
+                {{ child.overallAverage }}%
+              </div>
+              <div class="text-sm text-gray-600">Overall Average</div>
+            </div>
+            <div class="text-center p-3 bg-gray-50 rounded-lg">
+              <div class="text-xl font-bold text-secondary-600">
+                {{ child.attendance }}%
+              </div>
+              <div class="text-sm text-gray-600">Attendance</div>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <h4 class="font-medium text-gray-900">Available Reports</h4>
+
+            <div class="space-y-2">
+              <div
+                class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50"
+              >
+                <div class="flex items-center space-x-3">
+                  <svg
+                    class="w-5 h-5 text-red-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                    />
+                  </svg>
+                  <div>
+                    <p class="text-sm font-medium text-gray-900">
+                      Q1 Report Card
+                    </p>
+                    <p class="text-xs text-gray-500">First Quarter 2024</p>
+                  </div>
+                </div>
+                <button
+                  (click)="downloadReport(child, 'Q1')"
+                  class="btn-primary text-sm"
+                >
+                  Download PDF
+                </button>
+              </div>
+
+              <div
+                class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50"
+              >
+                <div class="flex items-center space-x-3">
+                  <svg
+                    class="w-5 h-5 text-red-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                    />
+                  </svg>
+                  <div>
+                    <p class="text-sm font-medium text-gray-900">
+                      Q2 Report Card
+                    </p>
+                    <p class="text-xs text-gray-500">Second Quarter 2024</p>
+                  </div>
+                </div>
+                <button
+                  (click)="downloadReport(child, 'Q2')"
+                  class="btn-primary text-sm"
+                >
+                  Download PDF
+                </button>
+              </div>
+
+              <div
+                class="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50"
+              >
+                <div class="flex items-center space-x-3">
+                  <svg
+                    class="w-5 h-5 text-red-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                    />
+                  </svg>
+                  <div>
+                    <p class="text-sm font-medium text-gray-900">
+                      Attendance Report
+                    </p>
+                    <p class="text-xs text-gray-500">Full Year 2024</p>
+                  </div>
+                </div>
+                <button
+                  (click)="downloadReport(child, 'attendance')"
+                  class="btn-primary text-sm"
+                >
+                  Download PDF
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2 class="text-lg font-semibold text-gray-900">Report Information</h2>
+      </div>
+      <div class="card-body">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-medium text-gray-900 mb-2">What's Included</h3>
+            <ul class="text-sm text-gray-600 space-y-1">
+              <li>• Subject grades and averages</li>
+              <li>• Attendance records</li>
+              <li>• Teacher comments</li>
+              <li>• Behavioral assessments</li>
+              <li>• Academic progress notes</li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="font-medium text-gray-900 mb-2">Report Schedule</h3>
+            <ul class="text-sm text-gray-600 space-y-1">
+              <li>• Q1: November 15, 2024</li>
+              <li>• Q2: February 15, 2025</li>
+              <li>• Q3: May 15, 2025</li>
+              <li>• Final: July 15, 2025</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-main-layout>

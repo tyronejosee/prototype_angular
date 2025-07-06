@@ -1,0 +1,135 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <h1 class="text-xl font-bold text-gray-900">Prototype Angular</h1>
+          </div>
+          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <a
+              routerLink="/dashboard"
+              routerLinkActive="border-primary-500 text-primary-600"
+              class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors"
+            >
+              Dashboard
+            </a>
+            <a
+              routerLink="/subjects"
+              routerLinkActive="border-primary-500 text-primary-600"
+              class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors"
+            >
+              Subjects
+            </a>
+            <a
+              routerLink="/annotations"
+              routerLinkActive="border-primary-500 text-primary-600"
+              class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors"
+            >
+              Annotations
+            </a>
+            <a
+              routerLink="/notifications"
+              routerLinkActive="border-primary-500 text-primary-600"
+              class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors"
+            >
+              Notifications
+            </a>
+            <a
+              routerLink="/calendar"
+              routerLinkActive="border-primary-500 text-primary-600"
+              class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors"
+            >
+              Calendar
+            </a>
+            <a
+              routerLink="/reports"
+              routerLinkActive="border-primary-500 text-primary-600"
+              class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors"
+            >
+              Reports
+            </a>
+            <a
+              routerLink="/teachers"
+              routerLinkActive="border-primary-500 text-primary-600"
+              class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 transition-colors"
+            >
+              Teachers
+            </a>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div class="text-sm text-gray-700" *ngIf="user">
+            Welcome, {{ user.firstName }}
+          </div>
+          <button (click)="logout()" class="btn-secondary text-sm">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Navigation -->
+  <div class="sm:hidden bg-white shadow-sm">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="bg-primary-50 border-primary-500 text-primary-700"
+        class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300"
+      >
+        Dashboard
+      </a>
+      <a
+        routerLink="/subjects"
+        routerLinkActive="bg-primary-50 border-primary-500 text-primary-700"
+        class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300"
+      >
+        Subjects
+      </a>
+      <a
+        routerLink="/annotations"
+        routerLinkActive="bg-primary-50 border-primary-500 text-primary-700"
+        class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300"
+      >
+        Annotations
+      </a>
+      <a
+        routerLink="/notifications"
+        routerLinkActive="bg-primary-50 border-primary-500 text-primary-700"
+        class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300"
+      >
+        Notifications
+      </a>
+      <a
+        routerLink="/calendar"
+        routerLinkActive="bg-primary-50 border-primary-500 text-primary-700"
+        class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300"
+      >
+        Calendar
+      </a>
+      <a
+        routerLink="/reports"
+        routerLinkActive="bg-primary-50 border-primary-500 text-primary-700"
+        class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300"
+      >
+        Reports
+      </a>
+      <a
+        routerLink="/teachers"
+        routerLinkActive="bg-primary-50 border-primary-500 text-primary-700"
+        class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:text-gray-800 hover:bg-gray-50 hover:border-gray-300"
+      >
+        Teachers
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="px-4 py-6 sm:px-0">
+      <ng-content></ng-content>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,110 @@
+<app-main-layout>
+  <div class="space-y-6">
+    <div class="flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-gray-900">Teacher Annotations</h1>
+      <div class="flex space-x-2">
+        <button
+          (click)="filterByCategory('all')"
+          [class.bg-primary-600]="selectedCategory === 'all'"
+          [class.text-white]="selectedCategory === 'all'"
+          class="px-3 py-1 rounded-md text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+        >
+          All
+        </button>
+        <button
+          (click)="filterByCategory('positive')"
+          [class.bg-success-600]="selectedCategory === 'positive'"
+          [class.text-white]="selectedCategory === 'positive'"
+          class="px-3 py-1 rounded-md text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+        >
+          Positive
+        </button>
+        <button
+          (click)="filterByCategory('negative')"
+          [class.bg-error-600]="selectedCategory === 'negative'"
+          [class.text-white]="selectedCategory === 'negative'"
+          class="px-3 py-1 rounded-md text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+        >
+          Negative
+        </button>
+        <button
+          (click)="filterByCategory('informative')"
+          [class.bg-primary-600]="selectedCategory === 'informative'"
+          [class.text-white]="selectedCategory === 'informative'"
+          class="px-3 py-1 rounded-md text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+        >
+          Informative
+        </button>
+      </div>
+    </div>
+
+    <app-loading-spinner *ngIf="isLoading" message="Loading annotations..." />
+
+    <div
+      *ngIf="!isLoading && filteredAnnotations.length === 0"
+      class="text-center py-12"
+    >
+      <p class="text-gray-500">
+        No annotations found for the selected category.
+      </p>
+    </div>
+
+    <div *ngIf="!isLoading" class="space-y-4">
+      <div
+        *ngFor="let annotation of filteredAnnotations"
+        class="card hover:shadow-lg transition-shadow duration-200"
+        [class.border-l-4]="true"
+        [class.border-l-success-500]="annotation.category === 'positive'"
+        [class.border-l-error-500]="annotation.category === 'negative'"
+        [class.border-l-primary-500]="annotation.category === 'informative'"
+      >
+        <div class="card-body">
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">
+                {{ annotation.title }}
+              </h3>
+              <p class="text-sm text-gray-600">
+                {{ annotation.teacherName }} • {{ annotation.subject }}
+              </p>
+            </div>
+            <div class="text-right">
+              <span
+                class="badge"
+                [class.badge-success]="annotation.category === 'positive'"
+                [class.badge-error]="annotation.category === 'negative'"
+                [class.badge-info]="annotation.category === 'informative'"
+              >
+                {{ annotation.category | titlecase }}
+              </span>
+              <div class="text-xs text-gray-500 mt-1">
+                {{ annotation.date | date : "MMM d, y" }}
+              </div>
+              <div *ngIf="!annotation.isRead" class="flex items-center mt-1">
+                <div class="w-2 h-2 bg-primary-500 rounded-full mr-1"></div>
+                <span class="text-xs text-primary-600 font-medium">New</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-gray-700 leading-relaxed">
+            {{ annotation.comment }}
+          </p>
+
+          <div class="mt-4 pt-3 border-t border-gray-200">
+            <button
+              *ngIf="!annotation.isRead"
+              (click)="markAsRead(annotation.id)"
+              class="text-sm text-primary-600 hover:text-primary-800 font-medium"
+            >
+              Mark as read
+            </button>
+            <span *ngIf="annotation.isRead" class="text-sm text-gray-500">
+              ✓ Read
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-main-layout>

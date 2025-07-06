@@ -1,0 +1,316 @@
+<app-main-layout>
+  <div class="space-y-6">
+    <!-- Header -->
+    <div
+      class="bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl p-6 text-white"
+    >
+      <h1 class="text-2xl font-bold mb-2">
+        Welcome back, {{ user?.firstName }}!
+      </h1>
+      <p class="text-primary-100">
+        Here's what's happening with your children's education
+      </p>
+    </div>
+
+    <app-loading-spinner
+      *ngIf="isLoading"
+      message="Loading dashboard data..."
+    />
+
+    <div *ngIf="!isLoading" class="space-y-6">
+      <!-- Children Summary -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div
+          *ngFor="let child of user?.children"
+          class="card hover:shadow-lg transition-shadow duration-200"
+        >
+          <article class="card-body">
+            <div class="flex items-center space-x-4">
+              <div class="flex-shrink-0">
+                <img
+                  [src]="
+                    child.photo ||
+                    'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150'
+                  "
+                  [alt]="child.firstName + ' ' + child.lastName"
+                  class="w-16 h-16 rounded-full object-cover"
+                />
+              </div>
+              <div class="flex-1">
+                <h3 class="text-lg font-semibold text-gray-900">
+                  {{ child.firstName }} {{ child.lastName }}
+                </h3>
+                <p class="text-sm text-gray-600">
+                  Class {{ child.class }} • Grade {{ child.grade }}
+                </p>
+              </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-2 gap-4">
+              <div class="text-center p-3 bg-gray-50 rounded-lg">
+                <div class="text-2xl font-bold text-primary-600">
+                  {{ child.overallAverage }}%
+                </div>
+                <div class="text-sm text-gray-600">Overall Average</div>
+              </div>
+              <div class="text-center p-3 bg-gray-50 rounded-lg">
+                <div class="text-2xl font-bold text-secondary-600">
+                  {{ child.attendance }}%
+                </div>
+                <div class="text-sm text-gray-600">Attendance</div>
+              </div>
+            </div>
+
+            <div class="mt-4 flex justify-center">
+              <span
+                class="badge"
+                [class.badge-success]="child.overallAverage >= 80"
+                [class.badge-warning]="
+                  child.overallAverage >= 70 && child.overallAverage < 80
+                "
+                [class.badge-error]="child.overallAverage < 70"
+              >
+                {{ getPerformanceStatus(child.overallAverage) }}
+              </span>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="text-3xl font-bold text-primary-600">
+              {{ totalSubjects }}
+            </div>
+            <div class="text-sm text-gray-600 mt-1">Total Subjects</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="text-3xl font-bold text-secondary-600">
+              {{ unreadNotifications }}
+            </div>
+            <div class="text-sm text-gray-600 mt-1">New Notifications</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="text-3xl font-bold text-accent-600">
+              {{ upcomingEvents }}
+            </div>
+            <div class="text-sm text-gray-600 mt-1">Upcoming Events</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="text-3xl font-bold text-warning-600">
+              {{ newAnnotations }}
+            </div>
+            <div class="text-sm text-gray-600 mt-1">New Annotations</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Recent Notifications -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="text-lg font-semibold text-gray-900">
+              Recent Notifications
+            </h2>
+          </div>
+          <div class="card-body">
+            <div
+              *ngIf="recentNotifications.length === 0"
+              class="text-center py-4 text-gray-500"
+            >
+              No recent notifications
+            </div>
+            <div
+              *ngFor="let notification of recentNotifications"
+              class="flex items-start space-x-3 py-3 border-b border-gray-100 last:border-b-0"
+            >
+              <div class="flex-shrink-0">
+                <div
+                  class="w-2 h-2 bg-primary-500 rounded-full mt-2"
+                  *ngIf="!notification.isRead"
+                ></div>
+                <div
+                  class="w-2 h-2 bg-gray-300 rounded-full mt-2"
+                  *ngIf="notification.isRead"
+                ></div>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">
+                  {{ notification.title }}
+                </p>
+                <p class="text-xs text-gray-500">
+                  {{ notification.date | date : "MMM d" }}
+                </p>
+              </div>
+            </div>
+            <div class="mt-4">
+              <a
+                href="/notifications"
+                class="text-sm text-primary-600 hover:text-primary-800 font-medium"
+              >
+                View all notifications →
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Annotations -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="text-lg font-semibold text-gray-900">
+              Recent Teacher Comments
+            </h2>
+          </div>
+          <div class="card-body">
+            <div
+              *ngIf="recentAnnotations.length === 0"
+              class="text-center py-4 text-gray-500"
+            >
+              No recent annotations
+            </div>
+            <div
+              *ngFor="let annotation of recentAnnotations"
+              class="flex items-start space-x-3 py-3 border-b border-gray-100 last:border-b-0"
+            >
+              <div class="flex-shrink-0">
+                <span
+                  class="w-3 h-3 rounded-full inline-block mt-1"
+                  [class.bg-success-500]="annotation.category === 'positive'"
+                  [class.bg-error-500]="annotation.category === 'negative'"
+                  [class.bg-primary-500]="annotation.category === 'informative'"
+                ></span>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">
+                  {{ annotation.title }}
+                </p>
+                <p class="text-xs text-gray-500">
+                  {{ annotation.teacherName }} •
+                  {{ annotation.date | date : "MMM d" }}
+                </p>
+              </div>
+            </div>
+            <div class="mt-4">
+              <a
+                href="/annotations"
+                class="text-sm text-primary-600 hover:text-primary-800 font-medium"
+              >
+                View all annotations →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="text-lg font-semibold text-gray-900">Quick Actions</h2>
+        </div>
+        <div class="card-body">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <a
+              href="/subjects"
+              class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <div class="flex-shrink-0">
+                <div
+                  class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center"
+                >
+                  <svg
+                    class="w-6 h-6 text-primary-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-900">View Subjects</p>
+                <p class="text-sm text-gray-500">Check grades and progress</p>
+              </div>
+            </a>
+
+            <a
+              href="/notifications"
+              class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <div class="flex-shrink-0">
+                <div
+                  class="w-10 h-10 bg-secondary-100 rounded-lg flex items-center justify-center"
+                >
+                  <svg
+                    class="w-6 h-6 text-secondary-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 17h5l-5 5v-5zM11 17H3a2 2 0 01-2-2V8a2 2 0 012-2h8a2 2 0 012 2v9a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-900">
+                  Read Notifications
+                </p>
+                <p class="text-sm text-gray-500">School announcements</p>
+              </div>
+            </a>
+
+            <a
+              href="/reports"
+              class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <div class="flex-shrink-0">
+                <div
+                  class="w-10 h-10 bg-accent-100 rounded-lg flex items-center justify-center"
+                >
+                  <svg
+                    class="w-6 h-6 text-accent-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="ml-4">
+                <p class="text-sm font-medium text-gray-900">
+                  Download Reports
+                </p>
+                <p class="text-sm text-gray-500">Get report cards</p>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-main-layout>
